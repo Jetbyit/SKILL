@@ -25,7 +25,7 @@ class _ASearchFragmentState extends State<ASearchFragment> with SingleTickerProv
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          //centerTitle: true,
           title: const Text('History', style: TextStyle(color: jobportalBrownColor),),
           backgroundColor: iconColorPrimary,
           leading: Container(),

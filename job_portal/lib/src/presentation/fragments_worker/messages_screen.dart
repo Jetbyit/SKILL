@@ -34,7 +34,7 @@ class AMessageFragmentState extends State<AMessageFragment> {
         title: const Text('Chat', style: TextStyle(color: jobportalBrownColor),),
         backgroundColor: Colors.white,//jobportalBrownColor
         elevation: 0,
-        centerTitle: true,
+        //centerTitle: true,
         leading: Container(),
         actions: [
           IconButton(

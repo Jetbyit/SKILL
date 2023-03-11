@@ -42,6 +42,7 @@ dependencies:
   intl:
   flutter_staggered_grid_view:
   cached_network_image:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,6 +71,7 @@ flutter:
     - assets/images/walk/
     - assets/images/user/
     - assets/images/welecom/
+    - assets/images/companies/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

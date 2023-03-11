@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/dating_model.dart';
+import 'package:job_portal/src/data/models/previos_work.dart';
 import 'package:job_portal/src/presentation/widgets/common_cached_image.dart';
 import 'package:job_portal/src/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -10,7 +11,7 @@ class AProfileFragment extends StatefulWidget {
 }
 
 class AProfileFragmentState extends State<AProfileFragment> {
-  List<DatingAppModel> list = getAllListData();
+  List<PreviosWorkImages> list = getAllListDataSkill();
 
   @override
   void initState() {
@@ -31,12 +32,20 @@ class AProfileFragmentState extends State<AProfileFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: jobportalBrownColor),),
-        backgroundColor: Colors.white,//jobportalBrownColor
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: jobportalBrownColor),
+        ),
+        backgroundColor: Colors.white, //jobportalBrownColor
         elevation: 0,
-        centerTitle: true,
+        //centerTitle: true,
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.settings, color: jobportalBrownColor,))
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.settings,
+                color: jobportalBrownColor,
+              ),),
         ],
         leading: Container(),
       ),
@@ -48,36 +57,27 @@ class AProfileFragmentState extends State<AProfileFragment> {
               children: [
                 16.height,
                 CommonCachedNetworkImage(
-                  imageUrl: 'https://assets.iqonic.design/old-themeforest-images/prokit/datingApp/Image.6.jpg',
+                  imageUrl:
+                      'https://morningsideplumbing.com/wp-content/uploads/2022/09/Emergency-Plumber-Atlanta.png',
                   height: 150,
                   width: 150,
                 ).cornerRadiusWithClipRRect(75),
                 16.height,
-                Text(
-                  'John Doe',
-                  style: boldTextStyle()
-                ),
+                Text('John Doe', style: boldTextStyle()),
                 16.height,
-                Text(
-                  'Email: john.doe@example.com',
-                  style: secondaryTextStyle()
-                ),
+                Text('Email: john.doe@example.com',
+                    style: secondaryTextStyle()),
                 16.height,
-                Text(
-                  'Phone: (123) 456-7890',
-                  style: secondaryTextStyle()
-                ),
+                Text('Phone: (123) 456-7890', style: secondaryTextStyle()),
                 16.height,
-                Text(
-                  'Location: New York, NY',
-                  style: secondaryTextStyle()
-                ),
+                Text('Location: New York, NY', style: secondaryTextStyle()),
                 16.height,
                 AppButton(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.wifi_tethering_rounded, color: jobportalBrownColor),
+                      const Icon(Icons.wifi_tethering_rounded,
+                          color: jobportalBrownColor),
                       Text(
                         'Upgrade your profile',
                         style: boldTextStyle(color: jobportalBrownColor),
@@ -95,7 +95,7 @@ class AProfileFragmentState extends State<AProfileFragment> {
               ],
             ),
             16.height,
-            Text('Biography', style: boldTextStyle(size: 25)),
+            Text('Bio', style: boldTextStyle(size: 25)),
             16.height,
             Text(
               'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s.',
@@ -107,10 +107,55 @@ class AProfileFragmentState extends State<AProfileFragment> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Gallery', style: boldTextStyle()),
-                Text('View All', style: primaryTextStyle(color: iconColorPrimary))
+                Text('Skill', style: boldTextStyle(size: 25)),
+                Text('Add skill',
+                    style: primaryTextStyle(color: jobportalBrownColor))
                     .onTap(
                       () {
+                    //DAProfileViewAllScreen().launch(context);
+                    print("DAProfileViewAllScreen().launch(context);");
+                  },
+                ),
+              ],
+            ),
+            Wrap(
+              children: List.generate(10, (index) {
+                Color color = Colors.primaries[index % Colors.primaries.length];
+                List<String> skills = [
+                  "Knowledge of plumbing systems",
+                  "analyze",
+                  "Attention to detail",
+                  "Physical strength and stamina",
+                  "Communication skills",
+                  "Time management skills",
+                  "Knowledge of safety regulations",
+                  "Customer service skills",
+                  "Technical skills",
+                  "Attention to hygiene",
+                ];
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Chip(
+                    label: Text('${skills[index]}',
+                        style: TextStyle(color: Colors.white)),
+                    backgroundColor: color,
+                    deleteIcon: Icon(Icons.cancel, color: Colors.white),
+                    onDeleted: () {
+                      // Do something when the cancel button is pressed
+                    },
+                  ),
+                );
+              }),
+            ),
+            16.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Previous work', style: boldTextStyle()),
+                Text('View All',
+                        style: primaryTextStyle(color: jobportalBrownColor))
+                    .onTap(
+                  () {
                     //DAProfileViewAllScreen().launch(context);
                     print("DAProfileViewAllScreen().launch(context);");
                   },
@@ -121,16 +166,17 @@ class AProfileFragmentState extends State<AProfileFragment> {
             Wrap(
               runSpacing: 16,
               spacing: 16,
-              children: list.take(12).map((e) {
-                return CommonCachedNetworkImage(
-                  imageUrl: e.image,
-                  fit: BoxFit.cover,
-                  height: 100,
-                  width: (context.width() / 3) - 22,
-                ).cornerRadiusWithClipRRect(10).onTap(() {
-                  print("DAZoomingScreen(img: e.image).launch(context);");
-                }, highlightColor: white, splashColor: white);
-              },
+              children: list.take(12).map(
+                (e) {
+                  return CommonCachedNetworkImage(
+                    imageUrl: e.imageUrl,
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: (context.width() / 3) - 22,
+                  ).cornerRadiusWithClipRRect(10).onTap(() {
+                    print("DAZoomingScreen(img: e.image).launch(context);");
+                  }, highlightColor: white, splashColor: white);
+                },
               ).toList(),
             ),
           ],

@@ -5,52 +5,52 @@ import 'package:job_portal/src/utils/colors.dart';
 class ASavedFragment extends StatelessWidget {
   final List<Map<String, dynamic>> savedItems = [
     {
-      'name': 'John Doe',
+      'name': 'Install and repair pipes and fixtures: This involves installing, repairing, and maintaining various types of plumbing systems, including water, gas, and sewage systems.',
       'hours': 8,
       'date': '2022-03-01',
-      'image': 'https://picsum.photos/200/300'
+      'image': 'https://empire-s3-production.bobvila.com/articles/wp-content/uploads/2021/07/how_much_does_a_plumber_cost.jpg'
     },
     {
-      'name': 'Jane Smith',
+      'name': 'Clear clogs and blockages',
       'hours': 6,
       'date': '2022-03-02',
-      'image': 'https://picsum.photos/200/301'
+      'image': 'https://centraheat.co.uk/wp-content/uploads/2021/03/What-can-a-plumber-fix-for-me.jpg'
     },
     {
-      'name': 'Bob Johnson',
+      'name': 'Install and repair water heaters: Plumbers install and repair a variety of water heaters, including tankless, electric, and gas models.',
       'hours': 4,
       'date': '2022-03-03',
-      'image': 'https://picsum.photos/201/300'
+      'image': 'https://www.mickbutler-andson.co.uk/wp-content/uploads/2016/03/Jobs-That-Need-a-Plumber-Norwich.jpg'
     },
     {
-      'name': 'Alice Williams',
+      'name': 'Fix leaks.',
       'hours': 5,
       'date': '2022-03-04',
-      'image': 'https://picsum.photos/202/301'
+      'image': 'http://www.rainsoftneiowa.com/wp-content/uploads/2020/08/Plumbing-Expert.jpg'
     },
     {
-      'name': 'Alice Williams',
+      'name': 'Install and repair water treatment systems: Plumbers may install and repair water ',
       'hours': 5,
       'date': '2022-03-04',
-      'image': 'https://picsum.photos/203/301'
+      'image': 'https://homefixituae.com/wp-content/uploads/2022/02/plumbers-near-me.jpg'
     },
     {
-      'name': 'Alice Williams',
+      'name': 'Respond to emergencies.',
       'hours': 5,
       'date': '2022-03-04',
-      'image': 'https://picsum.photos/204/301'
+      'image': 'https://www.ableskills.co.uk/wp/wp-content/uploads/2021/10/A-day-in-the-life-of-a-plumber.jpg'
     },
     {
-      'name': 'Alice Williams',
+      'name': 'Install and repair pipes and fixtures',
       'hours': 5,
       'date': '2022-03-04',
-      'image': 'https://picsum.photos/205/301'
+      'image': 'https://www.scoutnetworkblog.com/wp-content/uploads/2017/12/Plumber-Fixes-Washroom-Sink-Drains-With-Tools.jpg'
     },
     {
-      'name': 'Alice Williams',
+      'name': 'Fix leaks',
       'hours': 5,
       'date': '2022-03-04',
-      'image': 'https://picsum.photos/206/301'
+      'image': 'https://homefixituae.com/wp-content/uploads/2022/02/plumbers-near-me.jpg'
     }
   ];
 
@@ -58,10 +58,10 @@ class ASavedFragment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        //centerTitle: true,
         title: const Text('History', style: TextStyle(color: jobportalBrownColor),),
         backgroundColor: iconColorPrimary,
-        leading: Container(),
+        //leading: Container(),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.brown,
