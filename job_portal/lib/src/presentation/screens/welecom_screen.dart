@@ -1,3 +1,5 @@
+import 'package:job_portal/src/presentation/screens/have_skill_form.dart';
+import 'package:job_portal/src/presentation/screens/need_skill_form.dart';
 import 'package:job_portal/src/presentation/screens/register_screen.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +82,7 @@ class _AWelcomeScreenState extends State<AWelcomeScreen> {
               // ),
               child: const CircleAvatar(
                 radius: 50, // adjust the radius as needed
-                backgroundImage: AssetImage('assets/images/welecom/logo_skills.png'),
+                backgroundImage: AssetImage('assets/images/welecom/logo_skills.jpg'),
               )
             ),
             //Register using email
@@ -112,7 +114,8 @@ class _AWelcomeScreenState extends State<AWelcomeScreen> {
                       height: 60,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const ARegisterScreen(),),);
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => const ARegisterScreen(),),);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => JobSeekerFormScreen(),),);
                         },
                         style: ElevatedButton.styleFrom(
                           //primary: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
@@ -129,12 +132,14 @@ class _AWelcomeScreenState extends State<AWelcomeScreen> {
                       height: 60,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const ARegisterScreen(),),);
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => const ARegisterScreen(),),);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => EmployerForm(),),);
+
                         },
                         style: ElevatedButton.styleFrom(
                             primary: jobportalBrownColor,
                             //primary: appStore.isDarkModeOn ? context.cardColor : jobportalAppContainerColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),),
                         child: const Text('I need a Skill'),//Image.asset('image/appetit/Apple.png', width: 60, height: 60),
                       ),
                     ),

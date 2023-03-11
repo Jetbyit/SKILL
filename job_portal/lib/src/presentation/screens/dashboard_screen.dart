@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
-import 'package:job_portal/src/presentation/fragments/history_screen.dart';
-import 'package:job_portal/src/presentation/fragments/home_screen.dart';
-import 'package:job_portal/src/presentation/fragments/messages_screen.dart';
-import 'package:job_portal/src/presentation/fragments/profile_screen.dart';
-import 'package:job_portal/src/presentation/fragments/search_screen.dart';
+import 'package:job_portal/src/presentation/fragments_worker/history_screen.dart';
+import 'package:job_portal/src/presentation/fragments_worker/home_screen.dart';
+import 'package:job_portal/src/presentation/fragments_worker/messages_screen.dart';
+import 'package:job_portal/src/presentation/fragments_worker/profile_screen.dart';
+import 'package:job_portal/src/presentation/fragments_worker/search_screen.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
 class ADashboardScreen extends StatefulWidget {
@@ -26,11 +25,11 @@ class _ADashboardScreenState extends State<ADashboardScreen> {
   }
 
   List<Widget> widgetOption = <Widget>[
-    const AHomeFragment(),
-    const AMessageFragment(),
+    AHomeFragment(),
+    AMessageFragment(),
     //ASearchFragment(),
-    const ASavedFragment(),
-    const AProfileFragment(),
+    ASavedFragment(),
+    AProfileFragment(),
   ];
 
   @override
@@ -39,15 +38,15 @@ class _ADashboardScreenState extends State<ADashboardScreen> {
       body: widgetOption.elementAt(selectedItem),
         bottomNavigationBar: BottomNavigationBar(
           iconSize: 30,
-          backgroundColor: jobportalBrownColor,
+          backgroundColor: iconColorPrimary,
           type: BottomNavigationBarType.fixed,
           currentIndex: selectedItem,
           showUnselectedLabels: false,
           showSelectedLabels: false,
           onTap: onTapSelection,
           elevation: 0,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white54,
+          selectedItemColor: jobportalBrownColor,
+          unselectedItemColor: jobportalAppContainerColor,
           selectedFontSize: 12,
           unselectedFontSize: 12,
           items: <BottomNavigationBarItem>[
