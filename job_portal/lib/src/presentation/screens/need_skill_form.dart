@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:job_portal/src/presentation/screens/dashboard_screen.dart';
+import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:job_portal/src/presentation/screens/register_screen.dart';
 import 'package:job_portal/src/presentation/widgets/custom_textwidget.dart';

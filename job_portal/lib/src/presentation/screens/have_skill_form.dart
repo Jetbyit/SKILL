@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:job_portal/src/presentation/screens/dashboard_screen.dart';
+import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:job_portal/src/presentation/screens/register_screen.dart';
 import 'package:job_portal/src/presentation/widgets/custom_textwidget.dart';
@@ -115,18 +115,6 @@ class _JobSeekerFormScreenState extends State<JobSeekerFormScreen> {
                     return null;
                   },
                   onSaved: (value) => _skills = value,
-                ),
-                CustomTextField(
-                  labelText: 'Resume/CV',
-                  hintText: 'Upload your resume',
-
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your resume or CV';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _resume = value,
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/data_find_job.dart';
+import 'package:job_portal/src/utils/colors.dart';
 
 
 class JobDetail extends StatelessWidget {
@@ -49,8 +50,8 @@ class JobDetail extends StatelessWidget {
 
               Center(
                 child: Container(
-                  height: 50,
-                  width: 50,
+                  height: 150,
+                  width: MediaQuery.of(context).size.width * 1,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(job!.logo),
@@ -59,6 +60,7 @@ class JobDetail extends StatelessWidget {
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
+                    color: Colors.red,
                   ),
                 ),
               ),
@@ -185,9 +187,9 @@ class JobDetail extends StatelessWidget {
 
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: 50,
                       decoration: BoxDecoration(
-                        color: Colors.red[500],
+                        color: jobportalBrownColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
                         ),
@@ -225,7 +227,7 @@ class JobDetail extends StatelessWidget {
 
   Widget buildRequirement(String requirement){
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical:4),
       child: Row(
         children: [
 

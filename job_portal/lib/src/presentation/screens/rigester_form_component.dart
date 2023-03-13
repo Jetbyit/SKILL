@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:job_portal/src/presentation/screens/dashboard_screen.dart';
+import 'package:job_portal/src/presentation/screens/dashboard_screen_employer.dart';
+import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
@@ -129,7 +130,8 @@ class _MyFormState extends State<MyForm> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ADashboardScreen(),
+                    builder: (context) => ADashboardEmployerScreen(),
+                        //todo: ADashboardSkillerScreen(),
                     // TODO: ADashboardScreen()
                   ),
                 );

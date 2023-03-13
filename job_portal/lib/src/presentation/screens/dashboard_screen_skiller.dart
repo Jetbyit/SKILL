@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:job_portal/src/presentation/fragments_worker/history_screen.dart';
-import 'package:job_portal/src/presentation/fragments_worker/home_screen.dart';
-import 'package:job_portal/src/presentation/fragments_worker/messages_screen.dart';
-import 'package:job_portal/src/presentation/fragments_worker/profile_screen.dart';
-import 'package:job_portal/src/presentation/fragments_worker/search_screen.dart';
+import 'package:job_portal/src/presentation/fragments_skiller/history_screen.dart';
+import 'package:job_portal/src/presentation/fragments_skiller/home_screen.dart';
+import 'package:job_portal/src/presentation/fragments_skiller/messages_screen.dart';
+import 'package:job_portal/src/presentation/fragments_skiller/profile_screen.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
-class ADashboardScreen extends StatefulWidget {
-  ADashboardScreen({Key? key}) : super(key: key);
+class ADashboardSkillerScreen extends StatefulWidget {
+  ADashboardSkillerScreen({Key? key}) : super(key: key);
 
   @override
-  State<ADashboardScreen> createState() => _ADashboardScreenState();
+  State<ADashboardSkillerScreen> createState() => _ADashboardSkillerScreenState();
 }
 
-class _ADashboardScreenState extends State<ADashboardScreen> {
+class _ADashboardSkillerScreenState extends State<ADashboardSkillerScreen> {
   int selectedItem = 0;
 
   void onTapSelection(int index) {

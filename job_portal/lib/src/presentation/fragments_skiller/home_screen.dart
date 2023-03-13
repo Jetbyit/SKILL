@@ -3,23 +3,7 @@ import 'package:job_portal/src/data/models/data_find_job.dart';
 import 'package:job_portal/src/presentation/screens/job_offers_screen.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
-// class AHomeFragment extends StatelessWidget {
-//   const AHomeFragment({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Home', style: TextStyle(color: jobportalBrownColor),),
-//         backgroundColor: Colors.white,//jobportalBrownColor
-//         elevation: 0,
-//         centerTitle: true,
-//         leading: Container(),
-//       ),
-//       body: Container(),
-//     );
-//   }
-// }
+
 ///craftsmen professions
 class AHomeFragment extends StatefulWidget {
   @override
@@ -64,7 +48,6 @@ class _AHomeFragmentState extends State<AHomeFragment> {
       ),
       body: Column(
         children: [
-
           Expanded(
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -142,7 +125,6 @@ class _AHomeFragmentState extends State<AHomeFragment> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -192,12 +174,12 @@ class _AHomeFragmentState extends State<AHomeFragment> {
   }
 
   Widget buildRecommendation(Job job){
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => JobDetail(job: job)),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => JobDetail(job: job)),
+        );
       },
       child: Container(
         width: 200,
@@ -222,8 +204,8 @@ class _AHomeFragmentState extends State<AHomeFragment> {
               children: [
 
                 Container(
-                  height: 80,
-                  width: 80,
+                  height: 75,
+                  width: 75,
                   decoration: const BoxDecoration(
                     // image: DecorationImage(
                     //   image: AssetImage(job.logo),
@@ -304,12 +286,12 @@ class _AHomeFragmentState extends State<AHomeFragment> {
   }
 
   Widget buildLastJob(Job job){
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => JobDetail(job: job)),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => JobDetail(job: job)),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
