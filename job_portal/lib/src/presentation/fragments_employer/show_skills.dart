@@ -112,9 +112,9 @@ class _ShowSkillsState extends State<ShowSkills> {
             //   ),
             // ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.all(8),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
                 child: TextFormField(
                   controller: _searchController,
                   textInputAction: TextInputAction.next,
@@ -124,12 +124,16 @@ class _ShowSkillsState extends State<ShowSkills> {
                     labelStyle: TextStyle(color: Colors.grey),
                     //labelText: 'Full Name',
                     hintText: 'Search for craftsmen jobs...',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: color_primary_black),
                     //fillColor: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
-                    fillColor: Colors.white,
+                    fillColor: jobportalAppContainerColor,//Colors.white,
                     filled: true,
+                    suffixIcon: Icon(
+                      Icons.search,
+                      size: 28,
+                      color: color_primary_black,
+                    ),
                   ),
-
                 ),
               ),
             ),
