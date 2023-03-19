@@ -5,6 +5,8 @@ import 'package:job_portal/src/data/models/walktrough.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class WalkthroughScreen extends StatefulWidget {
+  final VoidCallback onDismiss;
+  WalkthroughScreen({required this.onDismiss});
   @override
   State<WalkthroughScreen> createState() => _WalkthroughScreenState();
 }
@@ -84,7 +86,9 @@ class _WalkthroughScreenState extends State<WalkthroughScreen> {
                       if (initialValue < 2) {
                         setState(() => pageController.jumpToPage(initialValue + 1));
                       } else {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AWelcomeScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AWelcomeScreen())).then((value) {
+                          widget.onDismiss();
+                        });
                       }
                     },
                     child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white),

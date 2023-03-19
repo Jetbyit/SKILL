@@ -29,7 +29,10 @@
 //   }
 // }
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:job_portal/src/data/models/job_offer.dart';
+import 'package:job_portal/src/data/repositories/job_offer_repository.dart';
 import 'package:job_portal/src/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -42,6 +45,7 @@ class AddJobOffer extends StatefulWidget {
 
 class _AddJobOfferState extends State<AddJobOffer> {
   final _formKey = GlobalKey<FormState>();
+  bool _isSending = false;
   int _currentStep = 0;
   TextEditingController _jobTitleController = TextEditingController();
   TextEditingController _jobDescriptionController = TextEditingController();
@@ -61,10 +65,16 @@ class _AddJobOfferState extends State<AddJobOffer> {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.cancel_outlined, color: jobportalBrownColor,),
         ),
-        title: Text(
+        title: const Text(
           'Add job',
           style: TextStyle(color: jobportalBrownColor),
         ),
+        bottom: _isSending
+            ? const PreferredSize(
+          preferredSize: Size.fromHeight(2),
+          child: LinearProgressIndicator(color: Colors.brown,),
+        )
+            : null,
       ),
       body: Column(
         children: [
@@ -207,14 +217,42 @@ class _AddJobOfferState extends State<AddJobOffer> {
               ),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AppButton(
               width: context.width(),
               color: jobportalAppContainerColor,
-              onTap: () {
-                //DASettingScreen().launch(context);
+              onTap: () async {
+                // DASettingScreen().launch(context);
+                setState(() {
+                  _isSending = true;
+                });
+                // Submit form
+                try {
+                  JobPosting jobPosting = JobPosting(
+                    id: '',
+                    title: _jobTitleController.text.trim(),
+                    description: _jobTitleController.text.trim(),
+                    skills: _jobSkillsController.text.trim(),
+                    compensation: double.parse(_jobCompensationController.text.trim()),
+                    location: _jobLocationController.text.trim(),
+                    contact: _jobContactController.text.trim(),
+                  );
+                  JobOfferRepository jobPostingRepository = JobOfferRepository();
+                  await jobPostingRepository.createJobPosting(jobPosting);
+                  Navigator.pop(context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('An error occurred while adding the job offer.'),
+                    ),
+                  );
+                } finally {
+                  setState(() {
+                    _isSending = false;
+                  });
+                }
+
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

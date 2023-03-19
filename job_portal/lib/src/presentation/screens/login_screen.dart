@@ -1,10 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_portal/src/data/models/usermodel.dart';
+import 'package:job_portal/src/data/repositories/auth_repository.dart';
+import 'package:job_portal/src/data/services/auth_service.dart';
 import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:job_portal/src/presentation/screens/forget_password.dart';
 import 'package:job_portal/src/presentation/screens/register_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
 import 'package:job_portal/src/utils/colors.dart';
+
 
 class ALoginScreen extends StatefulWidget {
   const ALoginScreen({Key? key}) : super(key: key);
@@ -15,6 +20,47 @@ class ALoginScreen extends StatefulWidget {
 
 class _ALoginScreenState extends State<ALoginScreen> {
   var viewPassword = true;
+  //late AuthRepository _authRepository;
+  //final AuthService _authRepository = AuthService(FirebaseAuth.instance);
+  final AuthRepository _authRepository = AuthRepository();
+
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  Future<void> _signInWithEmailAndPassword() async {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    final UserModel? user = await _authRepository.signInWithEmailAndPassword(email, password);
+
+    if (user == null) {
+      // handle sign in failure
+      print("handle sign in failure : ${user!.email} and ${user.id}");
+    } else {
+      // handle sign in success
+      print("handle sign in success : ${user!.email} and ${user.id}");
+    }
+  }
+
+  Future<void> _resetPassword() async {
+    final String email = _emailController.text.trim();
+    await _authRepository.resetPassword(email);
+    // handle password reset email sent
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   GlobalKey<FormState> mykey = new GlobalKey<FormState>();
 
@@ -28,44 +74,50 @@ class _ALoginScreenState extends State<ALoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: MediaQuery.of(context).viewPadding.top),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: jobportalAppContainerColor,
-                    // appStore.isDarkModeOn
-                    //     ? context.cardColor
-                    //     : appetitAppContainerColor,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  width: 50,
-                  height: 50,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Icon(Icons.arrow_back_ios_outlined,
-                        color: jobportalBrownColor),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ARegisterScreen(),),),
-                  child: Text('Register',
-                      style: TextStyle(fontSize: 20, color: context.iconColor)),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Container(
+            //       decoration: BoxDecoration(
+            //         color: jobportalAppContainerColor,
+            //         // appStore.isDarkModeOn
+            //         //     ? context.cardColor
+            //         //     : appetitAppContainerColor,
+            //         borderRadius: BorderRadius.circular(25),
+            //       ),
+            //       width: 50,
+            //       height: 50,
+            //       child: InkWell(
+            //         borderRadius: BorderRadius.circular(25),
+            //         child: Icon(Icons.arrow_back_ios_outlined,
+            //             color: jobportalBrownColor),
+            //         onTap: () {
+            //           Navigator.pop(context);
+            //         },
+            //       ),
+            //     ),
+            //     TextButton(
+            //       onPressed: () => Navigator.pushReplacement(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => ARegisterScreen(),
+            //         ),
+            //       ),
+            //       child: Text('Register',
+            //           style: TextStyle(fontSize: 20, color: context.iconColor)),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 60),
-            const Text('Login',
-                style: TextStyle(fontSize: 45, fontWeight: FontWeight.w500),),
+            const Text(
+              'Login',
+              style: TextStyle(fontSize: 45, fontWeight: FontWeight.w500),
+            ),
             const SizedBox(height: 16),
-            const Text('Welcome back! Please enter your email and password to continue.',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),),
+            const Text(
+              'Welcome back! Please enter your email and password to continue.',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+            ),
             Form(
               key: mykey,
               child: Column(
@@ -76,7 +128,8 @@ class _ALoginScreenState extends State<ALoginScreen> {
                       borderRadius: BorderRadius.circular(15),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
-                        decoration:const InputDecoration(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
                           labelStyle: TextStyle(color: Colors.grey),
                           border: InputBorder.none,
                           labelText: 'Enter E-mail',
@@ -103,6 +156,7 @@ class _ALoginScreenState extends State<ALoginScreen> {
                       borderRadius: BorderRadius.circular(15),
                       child: TextFormField(
                         obscureText: viewPassword,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           labelStyle: TextStyle(color: Colors.grey),
                           border: InputBorder.none,
@@ -135,15 +189,22 @@ class _ALoginScreenState extends State<ALoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AForgetPasswordScreen(),
-                                //TODO: AForgetPasswordScreen(),
-                          ),
+                        onTap: () {
+                          _resetPassword();
+                          /*
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AForgetPasswordScreen(),
+                              //TODO: AForgetPasswordScreen(),
+                            ),
+                          );
+                          */
+                        },
+                        child: const Text(
+                          'forget password?',
+                          style: TextStyle(fontWeight: FontWeight.w400),
                         ),
-                        child: Text('forget password?',
-                            style: TextStyle(fontWeight: FontWeight.w400)),
                       ),
                     ],
                   ),
@@ -155,15 +216,22 @@ class _ALoginScreenState extends State<ALoginScreen> {
               width: MediaQuery.of(context).size.width,
               height: 60,
               child: ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ADashboardSkillerScreen(),), // TODO: ADashboardScreen(),
-                ),
+                onPressed: () {
+                  _signInWithEmailAndPassword();
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ADashboardSkillerScreen(),
+                  //   ), // TODO: ADashboardScreen(),
+                  // );
+                },
                 child: Text('Login', style: TextStyle(fontSize: 18)),
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.orange.shade700,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),),),
+                  primary: Colors.orange.shade700,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),

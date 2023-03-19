@@ -122,7 +122,7 @@ class _AWelcomeScreenState extends State<AWelcomeScreen> {
                           primary: jobportalAppContainerColor,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         ),
-                        child: const Text("I have a Skill"),//Image.asset('image/appetit/google.png', width: 70, height: 70),
+                        child: const Text("I have a Skill", style: TextStyle(color: jobportalBrownColor),),//Image.asset('image/appetit/google.png', width: 70, height: 70),
                       ),
                     ),
                   ),

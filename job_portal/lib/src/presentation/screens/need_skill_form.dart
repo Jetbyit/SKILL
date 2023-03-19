@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:job_portal/src/data/models/employermodel.dart';
 import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:job_portal/src/presentation/screens/register_screen.dart';
@@ -13,19 +14,27 @@ class EmployerForm extends StatefulWidget {
 
 class _EmployerFormState extends State<EmployerForm> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  late EmployerModel? _employer;
+  late TextEditingController? _companyName;
+  late TextEditingController? _skillsnedded;
+  late TextEditingController? _jobLocation;
+  late TextEditingController? _additionalInfo;
 
-  String? _companyName;
-  String? _skillsnedded;
-  String? _industry;
-  String? _email;
-  String? _phone;
-  String? _jobTitle;
-  String? _jobDescription;
-  String? _jobRequirements;
-  String? _jobLocation;
-  String? _salaryRange;
-  String? _jobType;
-  String? _additionalInfo;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _employer = EmployerModel(
+      additionalInfo: '',
+      companyName: '',
+      jobLocation: '',
+      skillsNeeded: [],
+    );
+    _companyName = TextEditingController();
+    _skillsnedded = TextEditingController();
+    _jobLocation = TextEditingController();
+    _additionalInfo = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,47 +75,51 @@ class _EmployerFormState extends State<EmployerForm> {
                 CustomTextField(
                   labelText: 'Company Name',
                   hintText: 'Enter Company Name',
+                  controller: _companyName,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your company name';
                     }
                     return null;
                   },
-                  onSaved: (value) => _companyName = value,
+                  onSaved: (value) => _employer!.companyName = value!,
                 ),
                 CustomTextField(
                   labelText: 'Skills Nedded',
                   hintText: 'Enter skills nedded',
+                  controller: _skillsnedded,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your skills nedded';
                     }
                     return null;
                   },
-                  onSaved: (value) => _skillsnedded = value,
+                  onSaved: (value) => _employer!.skillsNeeded = value!.split(',').map((e) => e.trim()).toList(),
                 ),
                 CustomTextField(
                   labelText: 'Company Location',
                   hintText: 'Enter address of your company',
+                  controller: _jobLocation,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter address of your company';
                     }
                     return null;
                   },
-                  onSaved: (value) => _jobLocation = value,
+                  onSaved: (value) => _employer!.jobLocation = value!,
                 ),
 
                 CustomTextField(
                   labelText: 'Additional Information',
                   hintText: 'Additional information for your company',
+                  controller: _additionalInfo,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter information for your company';
                     }
                     return null;
                   },
-                  onSaved: (value) => _additionalInfo = value,
+                  onSaved: (value) => _employer!.additionalInfo = value!,
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(
@@ -114,23 +127,31 @@ class _EmployerFormState extends State<EmployerForm> {
                   height: 60,
                   child: ElevatedButton(
                     onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
-                      //   _formKey.currentState!.save();
-                      //   // Process and submit form data to database
-                      // }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Successfully Uploaded'),
-                        ),
-                      );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ARegisterScreen(),
-                          // TODO: ADashboardScreen()
-                        ),
-                      );
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        // Process and submit form data to database
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Successfully Uploaded'),
+                          ),
+                        );
+                        EmployerModel employer = EmployerModel(
+                          companyName: _companyName!.text.trim(),
+                          jobLocation: _jobLocation!.text.trim(),
+                          additionalInfo: _additionalInfo!.text.trim(),
+                          skillsNeeded: _skillsnedded!.text.split(','),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ARegisterScreen(
+                              employerModel: employer,
+                              worker: null,
+                            ),
+                          ),
+                        );
+                      }
                     },
-                    child: Text('Submit', style: TextStyle(fontSize: 18)),
+                    child: const Text('Submit', style: TextStyle(fontSize: 18)),
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFFF2894F),
                       shape: RoundedRectangleBorder(

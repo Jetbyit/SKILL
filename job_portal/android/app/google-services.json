@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399589833113",
+    "project_id": "skill-2ac02",
+    "storage_bucket": "skill-2ac02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399589833113:android:d5a7b313b42f9b5c847b08",
+        "android_client_info": {
+          "package_name": "com.example.job_portal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399589833113-bq84g1tu4qhqnk8b8atdbgrr8taa6enp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVeu-qeQJdo9v0snrRIObEPskh4SWkQY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399589833113-bq84g1tu4qhqnk8b8atdbgrr8taa6enp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

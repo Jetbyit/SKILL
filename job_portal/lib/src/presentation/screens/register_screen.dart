@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:job_portal/src/data/models/employermodel.dart';
+import 'package:job_portal/src/data/models/workermodel.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:job_portal/src/presentation/screens/rigester_form_component.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
 class ARegisterScreen extends StatefulWidget {
-  const ARegisterScreen({Key? key}) : super(key: key);
+  Worker? worker;
+  EmployerModel? employerModel;
+  ARegisterScreen({Key? key, required this.employerModel, required this.worker}) : super(key: key);
 
   @override
   _ARegisterScreenState createState() => _ARegisterScreenState();
@@ -49,7 +53,10 @@ class _ARegisterScreenState extends State<ARegisterScreen> {
             SizedBox(height: 16),
             Text('Create your account now! Fill in your information to start using our app and explore its features.'),
             SizedBox(height: 8),
-            MyForm(),
+            MyForm(
+              worker: widget.worker,
+              employerModel: widget.employerModel,
+            ),
           ],
         ),
       ),

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:job_portal/src/data/models/employermodel.dart';
+import 'package:job_portal/src/data/models/usermodel.dart';
+import 'package:job_portal/src/data/models/workermodel.dart';
+import 'package:job_portal/src/data/repositories/auth_repository.dart';
+import 'package:job_portal/src/data/repositories/job_offer_repository.dart';
 import 'package:job_portal/src/presentation/screens/dashboard_screen_employer.dart';
 import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
 class MyForm extends StatefulWidget {
-  const MyForm({Key? key}) : super(key: key);
+  Worker? worker;
+  EmployerModel? employerModel;
+  MyForm({Key? key, this.employerModel, this.worker}) : super(key: key);
 
   @override
   _MyFormState createState() => _MyFormState();
@@ -13,8 +20,77 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  //late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  final AuthRepository _authRepository = AuthRepository();
+  final JobOfferRepository _jobOfferRepository = JobOfferRepository();
   var viewPassword = true;
+
+  Future<void> _signUpWithEmailAndPassword() async {
+    try {
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+
+      await _authRepository.signUpWithEmailAndPassword(email, password);
+    } catch (e) {
+      // handle the exception here
+      print('Error signing up with email and password: $e');
+      // you can also show a dialog or a snackbar to inform the user about the error
+    }
+  }
+
+  Future<void> _creatWorkerProfile() async {
+    if (widget.worker != null && widget.employerModel == null) {
+      // todo add information for worker
+      try {
+        await _jobOfferRepository
+            .creatInformationWorker(widget.worker)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ADashboardSkillerScreen(),
+              //todo: ADashboardSkillerScreen(),
+              // TODO: ADashboardScreen()
+            ),
+          );
+        });
+      } catch (e) {
+        print("Error _creatWorkerProfile for Worker : $e");
+      }
+    } else if (widget.worker == null && widget.employerModel != null) {
+      // todo add information for employer
+      try {
+        await _jobOfferRepository
+            .creatInformationEmployer(widget.employerModel)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ADashboardEmployerScreen(),
+              //  ADashboardEmployerScreen()
+              //todo: ADashboardSkillerScreen(),
+              // TODO: ADashboardScreen()
+            ),
+          );
+        });
+      } catch (e) {
+        print("Error _creatWorkerProfile for Employer : $e");
+      }
+    }
+  }
+
+  // todo: upload data for both worker or employer
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //_nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +105,8 @@ class _MyFormState extends State<MyForm> {
               borderRadius: BorderRadius.circular(15),
               child: TextFormField(
                 textInputAction: TextInputAction.next,
-                // keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  labelText: 'Full Name',
-                  hintText: 'Enter Full Name',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  //fillColor: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
-                  fillColor: context.cardColor,
-                  filled: true,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: TextFormField(
-                textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -60,27 +117,46 @@ class _MyFormState extends State<MyForm> {
                   fillColor: context.cardColor,
                   filled: true,
                 ),
+                validator: (value) {
+                  if (value!.isEmpty)
+                    return 'Enter valid Email';
+                  else
+                    return null;
+                },
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.only(bottom: 16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: TextFormField(
-                textInputAction: TextInputAction.next,
-                // keyboardAppearance: ,
-                keyboardType: TextInputType.number,
+                obscureText: viewPassword,
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
-                  labelText: 'Phone Number',
-                  hintText: 'Enter 10-digit number',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  //fillColor: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
-                  fillColor: context.cardColor,
+                  labelText: 'Password',
+                  hintText: 'Enter your Password',
                   filled: true,
+                  fillColor: context.cardColor,
+                  // appStore.isDarkModeOn
+                  //     ? context.cardColor
+                  //     : appetitAppContainerColor,
+                  suffixIcon: IconButton(
+                    onPressed: () =>
+                        setState(() => viewPassword = !viewPassword),
+                    icon: viewPassword
+                        ? Icon(Icons.visibility_off, color: Colors.grey)
+                        : Icon(Icons.visibility, color: Colors.grey),
+                  ),
                 ),
+                validator: (value) {
+                  if (value!.isEmpty)
+                    return 'Enter valid Password';
+                  else
+                    return null;
+                },
               ),
             ),
           ),
@@ -93,7 +169,7 @@ class _MyFormState extends State<MyForm> {
                 decoration: InputDecoration(
                   labelStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
-                  labelText: 'Password',
+                  labelText: 'Confirme Password',
                   hintText: 'Enter your Password',
                   filled: true,
                   fillColor: context.cardColor,
@@ -122,36 +198,38 @@ class _MyFormState extends State<MyForm> {
             width: MediaQuery.of(context).size.width,
             height: 60,
             child: ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Successfully Registered'),
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
+                  await _signUpWithEmailAndPassword().then((value) async {
+                    await _creatWorkerProfile();
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Successfully Registered'),
                     ),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ADashboardEmployerScreen(),
-                        //todo: ADashboardSkillerScreen(),
-                    // TODO: ADashboardScreen()
-                  ),
-                );
+                  );
+                }
               },
               child: Text('Register', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF2894F),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),),
+                primary: Color(0xFFF2894F),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
             ),
           ),
           SizedBox(height: 16),
           Column(
             children: [
-              Text('By registering you agree to our',
-                  style: TextStyle(fontSize: 17),
+              Text(
+                'By registering you agree to our',
+                style: TextStyle(fontSize: 17),
               ),
-              Text('Terms and Conditions',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+              Text(
+                'Terms and Conditions',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
               ),
             ],
           ),

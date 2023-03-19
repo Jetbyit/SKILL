@@ -55,7 +55,7 @@ class _ADashboardEmployerScreenState extends State<ADashboardEmployerScreen> {
                 height: 50,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: jobportalBrownColor,
+                  color: jobportalAppContainerColor,
                 ),
                 child: Icon(Icons.add, size: 40, color: Colors.white),
               ),
