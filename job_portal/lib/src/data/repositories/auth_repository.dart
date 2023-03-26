@@ -8,8 +8,9 @@ import 'package:job_portal/src/data/services/auth_service.dart';
   Future<UserModel?> signInWithEmailAndPassword(String email, String password) async {
     await _jobAuthervice.signInWithEmailAndPassword(email, password);
   }
-  Future<void> signUpWithEmailAndPassword(String email, String password) async {
-    await _jobAuthervice.signUpWithEmailAndPassword(email, password);
+  Future<String?> signUpWithEmailAndPassword(String email, String password) async {
+    String? userId = await _jobAuthervice.signUpWithEmailAndPassword(email, password);
+    return userId;
   }
   Future<void> signOut() async {
     await _jobAuthervice.signOut();
@@ -20,5 +21,14 @@ import 'package:job_portal/src/data/services/auth_service.dart';
   Future<bool> isEmailVerified() async {
     bool isVerified = await _jobAuthervice.isEmailVerified();
     return isVerified;
+  }
+
+  Future<void> saveUserType(String? userId, bool? isWorker) async {
+    await _jobAuthervice.saveUserType(userId!, isWorker!);
+  }
+
+  Future<bool?> getUserType(String? userId) async {
+    bool? type = await _jobAuthervice.getUserType(userId!);
+    return type;
   }
 }

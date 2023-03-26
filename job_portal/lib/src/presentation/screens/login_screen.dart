@@ -39,6 +39,7 @@ class _ALoginScreenState extends State<ALoginScreen> {
     final String password = _passwordController.text.trim();
 
     final UserModel? user = await _authRepository.signInWithEmailAndPassword(email, password);
+    print("user from UserModel is : ${user!.id}");
 
     if (user == null) {
       // handle sign in failure
@@ -62,7 +63,7 @@ class _ALoginScreenState extends State<ALoginScreen> {
     super.dispose();
   }
 
-  GlobalKey<FormState> mykey = new GlobalKey<FormState>();
+  GlobalKey<FormState> mykey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

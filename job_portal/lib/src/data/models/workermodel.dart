@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Worker {
   String id;
   String name;
@@ -13,7 +15,7 @@ class Worker {
     required this.skills,
   });
 
-  factory Worker.fromJson(Map<String, dynamic> json) {
+  factory Worker.fromJson(DocumentSnapshot json) {
     return Worker(
       id: json['id'],
       name: json['name'],

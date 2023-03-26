@@ -35,7 +35,7 @@ class AMessageFragmentState extends State<AMessageFragment> {
         backgroundColor: Colors.white,//jobportalBrownColor
         elevation: 0,
         //centerTitle: true,
-        leading: Container(),
+        leading: const Icon(Icons.chat_bubble_outline_rounded, color: jobportalBrownColor,),
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: jobportalBrownColor,),

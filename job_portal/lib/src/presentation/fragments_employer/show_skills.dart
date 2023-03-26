@@ -42,7 +42,7 @@ class _ShowSkillsState extends State<ShowSkills> {
       appBar: AppBar(
         backgroundColor: Colors.white, //jobportalBrownColor
         elevation: 2,
-        leading: Container(),
+        leading: const Icon(Icons.stacked_bar_chart_sharp, color: jobportalBrownColor,),
         title: Text(
           'search',
           style: TextStyle(color: jobportalBrownColor),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/presentation/fragments_employer/add_job.dart';
+import 'package:job_portal/src/presentation/fragments_employer/add_job_updated.dart';
 import 'package:job_portal/src/presentation/fragments_employer/profile_employer.dart';
 import 'package:job_portal/src/presentation/fragments_employer/show_skills.dart';
 import 'package:job_portal/src/utils/colors.dart';
@@ -16,14 +17,14 @@ class _ADashboardEmployerScreenState extends State<ADashboardEmployerScreen> {
 
   void onTapSelection(int index) {
     if (index == 1) {
-     Navigator.push(context, MaterialPageRoute(builder: (context) => AddJobOffer()));
+     Navigator.push(context, MaterialPageRoute(builder: (context) => AddJobOfferUpdated()));
     }
     else setState(() => selectedItem = index);
   }
 
   List<Widget> widgetOption = <Widget>[
     ShowSkills(),
-    AddJobOffer(),
+    AddJobOfferUpdated(),//AddJobOffer(),
     ProfileEmployer(),
   ];
 

@@ -28,7 +28,7 @@ class _ASearchFragmentState extends State<ASearchFragment> with SingleTickerProv
           //centerTitle: true,
           title: const Text('History', style: TextStyle(color: jobportalBrownColor),),
           backgroundColor: iconColorPrimary,
-          leading: Container(),
+          leading: const Icon(Icons.search, color: jobportalBrownColor,),
         ),
       ),
     );

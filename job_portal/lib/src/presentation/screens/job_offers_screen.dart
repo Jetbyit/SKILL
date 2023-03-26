@@ -1,16 +1,69 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/data_find_job.dart';
+import 'package:job_portal/src/data/models/job_offer.dart';
+import 'package:job_portal/src/data/repositories/job_offer_repository.dart';
+import 'package:job_portal/src/presentation/screens/apply_form_screen.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
 
 class JobDetail extends StatelessWidget {
 
-  final Job? job;
+  final JobPosting? job;
 
   JobDetail({@required this.job});
 
+  IconData getIconForItem(String item) {
+    switch (item) {
+      case 'Electrician':
+        return Icons.electrical_services;
+      case 'Plumber':
+        return Icons.plumbing;
+      case 'Carpenter':
+        return Icons.construction;
+      case 'Painter':
+        return Icons.palette;
+      case 'Landscaper':
+        return Icons.nature_people;
+      case 'Mason':
+        return Icons.format_shapes;
+      case 'Roofing contractor':
+        return Icons.house_siding;
+      case 'HVAC technician':
+        return Icons.ac_unit;
+      case 'Flooring specialist':
+        return Icons.local_florist;
+      case 'Drywall installer':
+        return Icons.home_repair_service;
+      case 'Welder':
+        return Icons.build;
+      case 'Metalworker':
+        return Icons.extension;
+      case 'Blacksmith':
+        return Icons.fireplace;
+      case 'Sculptor':
+        return Icons.account_balance_outlined;
+      case 'Potter':
+        return Icons.celebration_rounded;
+      case 'Glassblower':
+        return Icons.local_drink;
+      case 'Jeweler':
+        return Icons.color_lens;
+      case 'Tailor':
+        return Icons.design_services;
+      case 'Shoemaker':
+        return Icons.accessibility;
+      case 'Woodworker':
+        return Icons.wb_sunny;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    JobOfferRepository jobOfferRepository = JobOfferRepository();
+    var userId = FirebaseAuth.instance;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -18,7 +71,7 @@ class JobDetail extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          job!.company,
+          job!.field,
           style: TextStyle(
             color: Colors.black,
           ),
@@ -50,18 +103,9 @@ class JobDetail extends StatelessWidget {
 
               Center(
                 child: Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(job!.logo),
-                      fit: BoxFit.fitWidth,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    color: Colors.red,
-                  ),
+                  //height: 150,
+                  //width: MediaQuery.of(context).size.width * 1,
+                  child: Icon(getIconForItem(job!.field), size: 48,),
                 ),
               ),
 
@@ -71,9 +115,10 @@ class JobDetail extends StatelessWidget {
 
               Center(
                 child: Text(
-                  job!.position,
+                  job!.worktype,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -85,7 +130,7 @@ class JobDetail extends StatelessWidget {
 
               Center(
                 child: Text(
-                  job!.city,
+                  job!.location,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -112,7 +157,7 @@ class JobDetail extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          job!.concept,
+                          'Budget',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -126,7 +171,7 @@ class JobDetail extends StatelessWidget {
                     child: Container(
                       child: Center(
                         child: Text(
-                          r"$" + job!.price + "/h",
+                          r"$" + job!.budget,
                           style: TextStyle(
                             fontSize: 36,
                           ),
@@ -157,9 +202,17 @@ class JobDetail extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: buildRequirements(),
+                  child: Text(
+                    job!.description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
                   ),
+                  // Column(
+                  //   children: buildRequirements(),
+                  // ),
                 ),
               ),
 
@@ -186,30 +239,68 @@ class JobDetail extends StatelessWidget {
                   ),
 
                   Expanded(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: jobportalBrownColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Apply Now",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                    child: FutureBuilder<bool?>(
+                        future: jobOfferRepository.hasUserAppliedForJob(jobId: job!.id, userId: userId.currentUser!.uid,),
+                        builder: (context, snapshot) {
+                          bool? value = snapshot.data;
+                          if(!snapshot.hasData){
+                            return Container();
+                          }
+                          return value! ?
+                          InkWell(
+                            onTap: (){},
+                            child: Container(
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: iconColorSecondaryDark,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Already Applied",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ) :
+                          InkWell(
+                            onTap:(){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ApplyFormScreen(jobId: job!.id,)),
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: jobportalBrownColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Apply Now",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                     ),
                   ),
-
                 ],
               ),
-
             ],
           ),
         ),

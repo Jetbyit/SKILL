@@ -1,17 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:job_portal/src/data/models/usermodel.dart';
 import 'package:job_portal/src/data/repositories/auth_repository.dart';
 
 class AuthService implements AuthRepository {
   final FirebaseAuth _firebaseAuth;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   AuthService(this._firebaseAuth);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async {
+  Future<UserModel?> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+      final UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -31,15 +33,31 @@ class AuthService implements AuthRepository {
   }
 
   @override
-  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+  Future<String?> signUpWithEmailAndPassword(String email, String password) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await _firebaseAuth.currentUser!.sendEmailVerification();
+      // retrieve the user ID from Firebase Authentication
+      final User? user = _auth.currentUser;
+      final String userId = user!.uid;
+
+      // return the user ID
+      return userId!;
+
+      ///await _firebaseAuth.currentUser!.sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       print(e);
+    }
+  }
+
+  Future<String?> getCurrentUserId() async {
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      return null;
     }
   }
 
@@ -62,5 +80,30 @@ class AuthService implements AuthRepository {
     final User? user = _firebaseAuth.currentUser;
     await user!.reload();
     return user.emailVerified;
+  }
+
+  @override
+  Future<void> saveUserType(String? userId, bool? isWorker) async {
+    try {
+      await _firestore.collection('type').doc(userId).set(
+        {
+          'type': isWorker,
+        },
+      );
+    } catch (e) {
+      print("err when try to add saveUserType information is : ${e}");
+    }
+  }
+
+  @override
+  Future<bool?> getUserType(String? userId) async {
+    bool? userType;
+    try {
+      DocumentSnapshot doc = await _firestore.collection('type').doc(userId).get();
+      userType = doc['type'];//doc.data()?['type'];
+    } catch (e) {
+      print("err when try to get getUserType information is : ${e}");
+    }
+    return userType;
   }
 }

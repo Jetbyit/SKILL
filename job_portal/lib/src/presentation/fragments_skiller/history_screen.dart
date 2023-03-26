@@ -61,7 +61,7 @@ class ASavedFragment extends StatelessWidget {
         //centerTitle: true,
         title: const Text('History', style: TextStyle(color: jobportalBrownColor),),
         backgroundColor: iconColorPrimary,
-        //leading: Container(),
+        leading: const Icon(Icons.history, color: jobportalBrownColor,),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.brown,

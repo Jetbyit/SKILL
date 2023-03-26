@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/employermodel.dart';
+import 'package:job_portal/src/data/models/user_data.dart';
 import 'package:job_portal/src/data/models/usermodel.dart';
 import 'package:job_portal/src/data/models/workermodel.dart';
 import 'package:job_portal/src/data/repositories/auth_repository.dart';
@@ -8,6 +9,7 @@ import 'package:job_portal/src/presentation/screens/dashboard_screen_employer.da
 import 'package:job_portal/src/presentation/screens/dashboard_screen_skiller.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class MyForm extends StatefulWidget {
   Worker? worker;
@@ -27,12 +29,16 @@ class _MyFormState extends State<MyForm> {
   final JobOfferRepository _jobOfferRepository = JobOfferRepository();
   var viewPassword = true;
 
-  Future<void> _signUpWithEmailAndPassword() async {
+  Future<String?> _signUpWithEmailAndPassword() async {
     try {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
+      final String? userId = await _authRepository.signUpWithEmailAndPassword(email, password);
+      Provider.of<UserData>(context, listen: false).currentUserId = userId;
+      //Provider.of<UserData>(context, listen: false).user = snapshot.data;
+      print("print userId >> ${userId}");
+      return userId;
 
-      await _authRepository.signUpWithEmailAndPassword(email, password);
     } catch (e) {
       // handle the exception here
       print('Error signing up with email and password: $e');
@@ -40,12 +46,14 @@ class _MyFormState extends State<MyForm> {
     }
   }
 
-  Future<void> _creatWorkerProfile() async {
+  Future<void> _creatWorkerProfile(String? userId) async {
     if (widget.worker != null && widget.employerModel == null) {
       // todo add information for worker
       try {
+        // todo: add type as worker
+        await _authRepository.saveUserType(userId, true);
         await _jobOfferRepository
-            .creatInformationWorker(widget.worker)
+            .creatInformationWorker(widget.worker, userId)
             .then((value) {
           Navigator.push(
             context,
@@ -62,8 +70,10 @@ class _MyFormState extends State<MyForm> {
     } else if (widget.worker == null && widget.employerModel != null) {
       // todo add information for employer
       try {
+        // todo: add type as employer
+        await _authRepository.saveUserType(userId, false);
         await _jobOfferRepository
-            .creatInformationEmployer(widget.employerModel)
+            .creatInformationEmployer(widget.employerModel, userId!)
             .then((value) {
           Navigator.push(
             context,
@@ -202,7 +212,8 @@ class _MyFormState extends State<MyForm> {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
                   await _signUpWithEmailAndPassword().then((value) async {
-                    await _creatWorkerProfile();
+                    print("value return from _signUpWithEmailAndPassword is : ${value}");
+                    await _creatWorkerProfile(value);
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

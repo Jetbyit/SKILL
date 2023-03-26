@@ -231,12 +231,12 @@ class _AddJobOfferState extends State<AddJobOffer> {
                 try {
                   JobPosting jobPosting = JobPosting(
                     id: '',
-                    title: _jobTitleController.text.trim(),
+                    field: _jobTitleController.text.trim(),
                     description: _jobTitleController.text.trim(),
-                    skills: _jobSkillsController.text.trim(),
-                    compensation: double.parse(_jobCompensationController.text.trim()),
+                    worktype: _jobSkillsController.text.trim(),
                     location: _jobLocationController.text.trim(),
-                    contact: _jobContactController.text.trim(),
+                    budget: _jobCompensationController.text.trim(),
+                    timestamp: Timestamp.now(),
                   );
                   JobOfferRepository jobPostingRepository = JobOfferRepository();
                   await jobPostingRepository.createJobPosting(jobPosting);

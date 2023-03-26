@@ -2,32 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class JobPosting {
   final String id;
-  final String title;
+  final String field;
   final String description;
-  final String skills;
-  final double compensation;
+  final String worktype;
   final String location;
-  final String contact;
+  final String budget;
+  final Timestamp timestamp;
 
   JobPosting({
     required this.id,
-    required this.title,
+    required this.field,
     required this.description,
-    required this.skills,
-    required this.compensation,
+    required this.worktype,
     required this.location,
-    required this.contact,
+    required this.timestamp,
+    required this.budget,
   });
 
   factory JobPosting.fromSnapshot(DocumentSnapshot snapshot) {
     return JobPosting(
       id: snapshot.id,
-      title: snapshot['title'],
+      field: snapshot['field'],
       description: snapshot['description'],
-      skills: snapshot['skills'],
-      compensation: snapshot['compensation'].toDouble(),
+      worktype: snapshot['worktype'],
       location: snapshot['location'],
-      contact: snapshot['contact'],
+      timestamp: snapshot['timestamp'],
+      budget: snapshot['budget'],
     );
   }
 
@@ -35,12 +35,12 @@ class JobPosting {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'title': title,
+      'field': field,
       'description': description,
-      'skills': skills,
-      'compensation': compensation,
+      'worktype': worktype,
       'location': location,
-      'contact': contact,
+      'timestamp': timestamp,
+      'budget': budget,
     };
   }
 }

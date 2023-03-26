@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/dating_model.dart';
 import 'package:job_portal/src/data/models/previos_work.dart';
+import 'package:job_portal/src/data/models/workermodel.dart';
+import 'package:job_portal/src/data/repositories/job_offer_repository.dart';
 import 'package:job_portal/src/presentation/widgets/common_cached_image.dart';
+import 'package:job_portal/src/presentation/widgets/sidebar.dart';
 import 'package:job_portal/src/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -12,6 +16,8 @@ class AProfileFragment extends StatefulWidget {
 
 class AProfileFragmentState extends State<AProfileFragment> {
   List<PreviosWorkImages> list = getAllListDataSkill();
+  JobOfferRepository _jobOfferRepository = JobOfferRepository();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -38,16 +44,21 @@ class AProfileFragmentState extends State<AProfileFragment> {
         ),
         backgroundColor: Colors.white, //jobportalBrownColor
         elevation: 0,
+
         //centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                //Sidebar(),
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Sidebar(),));
+              },
               icon: const Icon(
                 Icons.settings,
                 color: jobportalBrownColor,
-              ),),
+              ),
+          ),
         ],
-        leading: Container(),
+        leading: const Icon(Icons.person, color: jobportalBrownColor,),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -55,23 +66,38 @@ class AProfileFragmentState extends State<AProfileFragment> {
           children: [
             Column(
               children: [
-                16.height,
-                CommonCachedNetworkImage(
-                  imageUrl:
-                      'https://morningsideplumbing.com/wp-content/uploads/2022/09/Emergency-Plumber-Atlanta.png',
-                  height: 150,
-                  width: 150,
-                ).cornerRadiusWithClipRRect(75),
-                16.height,
-                Text('John Doe', style: boldTextStyle()),
-                16.height,
-                Text('Email: john.doe@example.com',
-                    style: secondaryTextStyle()),
-                16.height,
-                Text('Phone: (123) 456-7890', style: secondaryTextStyle()),
-                16.height,
-                Text('Location: New York, NY', style: secondaryTextStyle()),
-                16.height,
+
+                FutureBuilder<Worker>(
+                  future: _jobOfferRepository.getInformationWorkder(_auth.currentUser!.uid),
+                  builder: (context,  snapshot) {
+                    if (snapshot.hasData) {
+                      final workerModel = snapshot.data;
+                      return Column(
+                        children: [
+                          CommonCachedNetworkImage(
+                            imageUrl: 'https://morningsideplumbing.com/wp-content/uploads/2022/09/Emergency-Plumber-Atlanta.png',
+                            height: 150,
+                            width: 150,
+                          ).cornerRadiusWithClipRRect(75),
+                          16.height,
+                          Text('Worker Name: ${workerModel!.name}', style: boldTextStyle()),
+                          16.height,
+                          Text('Worker Location: ${workerModel!.address}', style: secondaryTextStyle()),
+                          16.height,
+                          Text('Skills : ${workerModel!.skills}', style: secondaryTextStyle()),
+                          16.height,
+                          Text('Previous Work Experience: ${workerModel!.previousWorkExperience}', style: secondaryTextStyle()),
+                          16.height,
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
+
                 AppButton(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

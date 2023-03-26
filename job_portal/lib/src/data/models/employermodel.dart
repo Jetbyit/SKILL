@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class EmployerModel {
   String _companyName;
   List<String> _skillsNeeded;
@@ -35,7 +37,7 @@ class EmployerModel {
     _additionalInfo = additionalInfo;
   }
 
-  factory EmployerModel.fromJson(Map<String, dynamic> json) {
+  factory EmployerModel.fromJson(DocumentSnapshot json) {
     return EmployerModel(
       companyName: json['companyName'],
       skillsNeeded: List<String>.from(json['skillsNeeded']),

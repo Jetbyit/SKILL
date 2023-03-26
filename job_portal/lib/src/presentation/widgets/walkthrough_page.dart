@@ -39,7 +39,7 @@ class WalkthroughPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(e.title.toString(), style: const TextStyle(color: Colors.white, fontSize: 45, fontWeight: FontWeight.w800)),
+                    Text(e.field.toString(), style: const TextStyle(color: Colors.white, fontSize: 45, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 16),
                     Text(e.subtitle.toString(), style: const TextStyle(color: Colors.white)),
                     const SizedBox(height: 80),
