@@ -17,17 +17,17 @@ import 'package:job_portal/src/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
-class AProfileFragment extends StatefulWidget {
+class AProfileVisiting extends StatefulWidget {
   final String? peeruserId;
-  AProfileFragment({this.peeruserId});
+  AProfileVisiting({this.peeruserId});
   @override
-  AProfileFragmentState createState() => AProfileFragmentState();
+  AProfileVisitingState createState() => AProfileVisitingState();
 }
 
-class AProfileFragmentState extends State<AProfileFragment> {
+class AProfileVisitingState extends State<AProfileVisiting> {
   List<PreviosWorkImages> list = getAllListDataSkill();
   JobOfferRepository _jobOfferRepository = JobOfferRepository();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
   File? _image;
   final picker = ImagePicker();
   bool _isLoading = false;
@@ -67,12 +67,12 @@ class AProfileFragmentState extends State<AProfileFragment> {
   }
 
   Future<List<DocumentSnapshot>> _workFuture() async {
-    final user = _auth.currentUser;
-    if (user == null) return [];
+    //final user = _auth.currentUser;
+    if (widget!.peeruserId! == null) return [];
 
     final querySnapshot = await FirebaseFirestore.instance
         .collection('myCollection')
-        .doc(user.uid)
+        .doc(widget!.peeruserId!)
         .collection('mywork')
         .orderBy('date', descending: true)
         .get();
@@ -135,32 +135,32 @@ class AProfileFragmentState extends State<AProfileFragment> {
             Column(
               children: [
                 FutureBuilder<Worker>(
-                  future: _jobOfferRepository.getInformationWorkder(_auth.currentUser!.uid),
+                  future: _jobOfferRepository.getInformationWorkder(widget!.peeruserId!),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final workerModel = snapshot.data;
                       return Column(
                         children: [
                           CircleAvatar(
-                            radius: 50.0,
-                            backgroundImage: _image != null ? FileImage(_image!) : null,
+                              radius: 50.0,
+                              backgroundImage: _image != null ? FileImage(_image!) : null,
 
-                            child: workerModel!.imageUrl! == null ?
-                            const Icon(
-                              Icons.person,
-                              size: 50.0,
-                            ) : CircleAvatar(
-                              radius: 100,
-                              backgroundColor: Colors.grey[300],
-                              child: ClipOval(
-                                child: Image.network(
-                                  workerModel!.imageUrl!,
-                                  width: 200,
-                                  height: 200,
-                                  fit: BoxFit.cover,
+                              child: workerModel!.imageUrl! == null ?
+                              const Icon(
+                                Icons.person,
+                                size: 50.0,
+                              ) : CircleAvatar(
+                                radius: 100,
+                                backgroundColor: Colors.grey[300],
+                                child: ClipOval(
+                                  child: Image.network(
+                                    workerModel!.imageUrl!,
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            )
+                              )
 
 
                           ),
@@ -225,7 +225,7 @@ class AProfileFragmentState extends State<AProfileFragment> {
             16.height,
 
             FutureBuilder<Worker>(
-              future: _jobOfferRepository.getInformationWorkder(_auth.currentUser!.uid),
+              future: _jobOfferRepository.getInformationWorkder(widget!.peeruserId!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   Worker? workerModel = snapshot.data;
@@ -236,7 +236,7 @@ class AProfileFragmentState extends State<AProfileFragment> {
                       Text('Bio', style: boldTextStyle(size: 25)),
                       16.height,
                       Text(
-                      "${workerModel!.bio}",
+                        "${workerModel!.bio}",
                         style: secondaryTextStyle(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
@@ -257,9 +257,9 @@ class AProfileFragmentState extends State<AProfileFragment> {
               children: [
                 Text('Skill', style: boldTextStyle(size: 25)),
                 Text('Add skill',
-                        style: primaryTextStyle(color: jobportalBrownColor))
+                    style: primaryTextStyle(color: jobportalBrownColor))
                     .onTap(
-                  () {
+                      () {
                     //DAProfileViewAllScreen().launch(context);
                     print("DAProfileViewAllScreen().launch(context);");
                   },
@@ -269,7 +269,7 @@ class AProfileFragmentState extends State<AProfileFragment> {
 
             FutureBuilder<Worker>(
               future: _jobOfferRepository
-                  .getInformationWorkder(_auth.currentUser!.uid),
+                  .getInformationWorkder(widget!.peeruserId!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final workerModel = snapshot.data;
@@ -281,10 +281,10 @@ class AProfileFragmentState extends State<AProfileFragment> {
                       itemCount: workerModel!.skills.length,
                       itemBuilder: (context, index) {
                         Color color =
-                            Colors.primaries[index % Colors.primaries.length];
+                        Colors.primaries[index % Colors.primaries.length];
                         return Chip(
                           label: Text('${workerModel!.skills[index]}',
-                          style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.white)),
                           backgroundColor: color,
                           deleteIcon: Icon(Icons.cancel, color: Colors.white),
                           onDeleted: () {
@@ -305,9 +305,9 @@ class AProfileFragmentState extends State<AProfileFragment> {
               children: [
                 Text('Previous work', style: boldTextStyle()),
                 Text('View All',
-                        style: primaryTextStyle(color: jobportalBrownColor))
+                    style: primaryTextStyle(color: jobportalBrownColor))
                     .onTap(
-                  () {
+                      () {
                     //DAProfileViewAllScreen().launch(context);
                     print("DAProfileViewAllScreen().launch(context);");
                   },

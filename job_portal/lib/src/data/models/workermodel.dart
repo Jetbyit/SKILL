@@ -5,6 +5,9 @@ class Worker {
   String name;
   String previousWorkExperience;
   String address;
+  String? bio;
+  String? jobTitle;
+  String? imageUrl;
   List<String> skills;
 
   Worker({
@@ -13,6 +16,9 @@ class Worker {
     required this.previousWorkExperience,
     required this.address,
     required this.skills,
+    this.jobTitle,
+    this.imageUrl,
+    this.bio,
   });
 
   factory Worker.fromJson(DocumentSnapshot json) {
@@ -20,7 +26,10 @@ class Worker {
       id: json['id'],
       name: json['name'],
       address: json['address'],
+      jobTitle: json['jobTitle'],
       previousWorkExperience: json['previousWorkExperience'],
+      bio: json['bio'],
+      imageUrl: json['imageUrl'],
       skills: List<String>.from(json['skills']),
     );
   }
@@ -30,8 +39,11 @@ class Worker {
       'id': id,
       'name': name,
       'address': address,
+      'imageUrl': imageUrl,
       "previousWorkExperience": previousWorkExperience,
       'skills': skills,
+      'bio': bio,
+      'jobTitle': jobTitle,
     };
   }
 }

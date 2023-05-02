@@ -20,7 +20,9 @@ class _AHomeFragmentState extends State<AHomeFragment> {
   bool isSearching = false;
   TextEditingController _searchController = TextEditingController();
   List<JobPosting> _searchResults = [];
-
+  final _formKey = GlobalKey<FormState>();
+  double _minPrice = 0.0;
+  double _maxPrice = 1000.0;
 
   IconData getIconForItem(String item) {
     switch (item) {
@@ -72,11 +74,38 @@ class _AHomeFragmentState extends State<AHomeFragment> {
   Future<void> _performSearch() async {
     String searchTerm = _searchController.text.trim();
     if (searchTerm.isNotEmpty) {
-      List<JobPosting> results = await _jobOfferRepository.searchJobPostingsByDescription(searchTerm);
+      List<JobPosting> results =
+          await _jobOfferRepository.searchJobPostingsByDescription(searchTerm);
+
       ///List<JobPosting> seconResults = await _jobOfferRepository.getJobPostings();
       print("_searchResults now is : ${results}");
       setState(() {
         _searchResults = results;
+      });
+    }
+  }
+
+  void _filterByPrice() {
+    // List<Product> filteredProducts = widget.products.where((product) {
+    //   return product.price >= _minPrice && product.price <= _maxPrice;
+    // }).toList();
+    // widget.onFilter(filteredProducts);
+  }
+
+  Future<void> _showFilterBottomSheet() async {
+    final Map<String, dynamic>? filterData = await showModalBottomSheet(
+      context: context,
+      builder: (_) => buidFilterDataOption(context),
+    );
+    if (filterData != null) {
+      print("filterData is : ${filterData}");
+      setState(() {
+        // _data = filterDataByParams(
+        //   field: filterData['field'],
+        //   budget: filterData['budget'],
+        //   location: filterData['location'],
+        //   timestamp: filterData['timestamp'],
+        // );
       });
     }
   }
@@ -136,22 +165,27 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                                 hintText: 'Search by field ex : painter',
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.search),
-                                  onPressed: (){
-                                    if(_searchController.text.trim().isNotEmpty && _searchController.text.trim() != null){
+                                  onPressed: () {
+                                    if (_searchController.text
+                                            .trim()
+                                            .isNotEmpty &&
+                                        _searchController.text.trim() != null) {
                                       _performSearch();
                                     }
                                   },
                                 ),
                               ),
-                              onChanged: (value){
+                              onChanged: (value) {
                                 print("value is changed real time : $value");
                                 setState(() {
                                   isSearching = false;
                                 });
                               },
-                              onSubmitted: (value){
-                                print("value on submit field is : $value test if value is empty >> ${value.isEmpty}");
-                                if(_searchController.text.trim().isNotEmpty && _searchController.text.trim() != null){
+                              onSubmitted: (value) {
+                                print(
+                                    "value on submit field is : $value test if value is empty >> ${value.isEmpty}");
+                                if (_searchController.text.trim().isNotEmpty &&
+                                    _searchController.text.trim() != null) {
                                   setState(() {
                                     isSearching = true;
                                   });
@@ -161,11 +195,16 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                             ),
                           ),
                         ),
-                        IconButton(onPressed: (){}, icon: const Icon(
-                          Icons.filter_list,
-                          size: 22,
-                          color: jobportalBrownColor,
-                        ),),
+                        IconButton(
+                          onPressed: () {
+                            _showFilterBottomSheet();
+                          },
+                          icon: const Icon(
+                            Icons.filter_list,
+                            size: 22,
+                            color: jobportalBrownColor,
+                          ),
+                        ),
                       ],
                     ),
                     Padding(
@@ -194,7 +233,8 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                     //   ),
                     // ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       child: Text(
                         "Recommended for you",
                         style: TextStyle(
@@ -212,7 +252,8 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       child: Text(
                         "Recently added",
                         style: TextStyle(
@@ -230,36 +271,28 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return const Center(child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            return Text('data is : ${jobObjects} Error: ${snapshot.error}');
                           } else {
-                            return isSearching ? ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _searchResults.length,
-                              itemBuilder: (context, index) {
-                                JobPosting jobPosting = _searchResults[index];
-                                return jobDetails(jobPosting);
-                              },
-                            ): ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: jobObjects.length,
-                                itemBuilder: (context, index) {
-                                  var data = jobObjects[index];
-                                  return buildLastJob(data);
-                                },
-                            );
-                            return ListView.builder(
-                              itemCount: _searchResults.length,
-                              itemBuilder: (context, index) {
-                                JobPosting jobPosting = _searchResults[index];
-                                return jobDetails(jobPosting);
-                              },
-                            );
+                            return isSearching
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: _searchResults.length,
+                                    itemBuilder: (context, index) {
+                                      JobPosting jobPosting = _searchResults[index];
+                                      return jobDetails(jobPosting);
+                                    },
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: jobObjects.length,
+                                    itemBuilder: (context, index) {
+                                      var data = jobObjects[index];
+                                      return buildLastJob(data);
+                                    },
+                                  );
                           }
                         },
                       ),
-                      // Column(
-                      //   children: buildLastJobs(),
-                      // ),
                     ),
                   ],
                 ),
@@ -267,6 +300,69 @@ class _AHomeFragmentState extends State<AHomeFragment> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buidFilterDataOption(BuildContext context) {
+    final TextEditingController fieldController = TextEditingController();
+    final TextEditingController budgetController = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
+    final TextEditingController timestampController = TextEditingController();
+    DateTime? _timestamp;
+    return Container(
+      height: 300,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child:
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Price range'),
+          Row(
+            children: [
+              Text('Min: $_minPrice'),
+              Slider(
+                value: _minPrice,
+                min: 0.0,
+                max: _maxPrice,
+                onChanged: (value) {
+                  setState(() {
+                    _minPrice = value;
+                  });
+                  _filterByPrice();
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Max: $_maxPrice'),
+              Slider(
+                value: _maxPrice,
+                min: _minPrice,
+                max: 1000.0,
+                onChanged: (value) {
+                  setState(() {
+                    _maxPrice = value;
+                  });
+                  _filterByPrice();
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -547,6 +643,7 @@ class _AHomeFragmentState extends State<AHomeFragment> {
   }
 
   Widget buildLastJob(JobPosting? job) {
+    return jobDetails(job);
     return FutureBuilder<JobPosting>(
       future: _jobOfferRepository.getJobItemPostings(job!.id),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -556,18 +653,19 @@ class _AHomeFragmentState extends State<AHomeFragment> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return  jobDetails(job);
+          return jobDetails(job);
         }
       },
     );
   }
 
-  Widget jobDetails(JobPosting? job){
+  Widget jobDetails(JobPosting? job) {
+    print('JobPosting? job is : ${job}');
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => JobDetail(job: job)),
+          MaterialPageRoute(builder: (context) => JobDetail(job: job, isEmplyer: false,)),
         );
       },
       child: Container(
@@ -583,7 +681,7 @@ class _AHomeFragmentState extends State<AHomeFragment> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child:Container(
+              child: Container(
                 height: 80,
                 width: 80,
                 margin: EdgeInsets.all(2),
@@ -596,33 +694,36 @@ class _AHomeFragmentState extends State<AHomeFragment> {
                     Radius.circular(10),
                   ),
                 ),
-                child: Icon(getIconForItem(job!.field), size: 48,),
+                child: Icon(
+                  getIconForItem(job!.field),
+                  size: 48,
+                ),
               ),
             ),
             Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        job!.worktype,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        job!.field,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    job!.worktype,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )),
+                  Text(
+                    job!.field,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            )),
             Text(
               r"$" + job!.budget.toString(),
               style: TextStyle(
@@ -635,3 +736,4 @@ class _AHomeFragmentState extends State<AHomeFragment> {
     );
   }
 }
+

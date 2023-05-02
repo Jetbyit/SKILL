@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final String hintText;
   final IconData? prefixIcon;
-  final IconData? suffixIcon;
+  final IconButton? suffixIcon;
   final bool obscureText;
   final bool enabled;
   final TextInputType? keyboardType;
@@ -51,7 +51,7 @@ class CustomTextField extends StatelessWidget {
             fillColor: jobportalAppContainerColor,
             filled: true,
             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+            suffixIcon: suffixIcon != null ? suffixIcon : null,
           ),
           obscureText: obscureText,
           enabled: enabled,

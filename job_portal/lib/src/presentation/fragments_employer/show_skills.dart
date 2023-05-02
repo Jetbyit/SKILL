@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_portal/src/presentation/screens/list_workers.dart';
 import 'package:job_portal/src/utils/colors.dart';
 
 // class ShowSkills extends StatefulWidget {
@@ -42,7 +43,10 @@ class _ShowSkillsState extends State<ShowSkills> {
       appBar: AppBar(
         backgroundColor: Colors.white, //jobportalBrownColor
         elevation: 2,
-        leading: const Icon(Icons.stacked_bar_chart_sharp, color: jobportalBrownColor,),
+        leading: const Icon(
+          Icons.stacked_bar_chart_sharp,
+          color: jobportalBrownColor,
+        ),
         title: Text(
           'search',
           style: TextStyle(color: jobportalBrownColor),
@@ -51,92 +55,6 @@ class _ShowSkillsState extends State<ShowSkills> {
       body: SafeArea(
         child: Column(
           children: [
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 10),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.grey.withOpacity(0.5),
-            //         spreadRadius: 1,
-            //         blurRadius: 5,
-            //         offset: Offset(0, 2),
-            //       ),
-            //     ],
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: Padding(
-            //           padding: EdgeInsets.symmetric(vertical: 8),
-            //           child: ClipRRect(
-            //             borderRadius: BorderRadius.circular(15),
-            //             child: TextFormField(
-            //               controller: _searchController,
-            //               textInputAction: TextInputAction.next,
-            //               // keyboardType: TextInputType.name,
-            //               decoration: const InputDecoration(
-            //                 border: InputBorder.none,
-            //                 labelStyle: TextStyle(color: Colors.grey),
-            //                 //labelText: 'Full Name',
-            //                 hintText: 'Search for craftsmen jobs...',
-            //                 hintStyle: TextStyle(color: Colors.grey),
-            //                 //fillColor: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
-            //                 fillColor: Colors.white,
-            //                 filled: true,
-            //               ),
-            //
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //       // Expanded(
-            //       //   child: TextField(
-            //       //     controller: _searchController,
-            //       //     decoration: InputDecoration(
-            //       //       hintText: 'Search for craftsmen jobs...',
-            //       //       border: InputBorder.none,
-            //       //     ),
-            //       //     onSubmitted: (_) {
-            //       //       // Perform search here
-            //       //     },
-            //       //   ),
-            //       // ),
-            //       IconButton(
-            //         icon: Icon(Icons.search),
-            //         onPressed: () {
-            //           // Perform search here
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: TextFormField(
-                  controller: _searchController,
-                  textInputAction: TextInputAction.next,
-                  // keyboardType: TextInputType.name,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(color: Colors.grey),
-                    //labelText: 'Full Name',
-                    hintText: 'Search for craftsmen jobs...',
-                    hintStyle: TextStyle(color: color_primary_black),
-                    //fillColor: appStore.isDarkModeOn ? context.cardColor : appetitAppContainerColor,
-                    fillColor: jobportalAppContainerColor,//Colors.white,
-                    filled: true,
-                    suffixIcon: Icon(
-                      Icons.search,
-                      size: 28,
-                      color: color_primary_black,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Expanded(
               child: GridView.count(
                 crossAxisCount: 3,
@@ -201,7 +119,6 @@ class _ShowSkillsState extends State<ShowSkills> {
                   ),
                 ],
               ),
-
             ),
           ],
         ),
@@ -211,7 +128,7 @@ class _ShowSkillsState extends State<ShowSkills> {
 }
 
 class CraftsmenJob extends StatelessWidget {
-  final String title;
+  final String? title;
   final IconData icon;
 
   const CraftsmenJob({Key? key, required this.title, required this.icon})
@@ -219,21 +136,32 @@ class CraftsmenJob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 80,
-            color: Colors.blueGrey,
+    return InkWell(
+      onTap: () {
+        // todo: depend on title do the function
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ListOfWorkers(title: title!,),
           ),
-          SizedBox(height: 10),
-          Text(
-            title,
-            style: TextStyle(fontSize: 18),
-          ),
-        ],
+        );
+      },
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 80,
+              color: Colors.blueGrey,
+            ),
+            SizedBox(height: 10),
+            Text(
+              title!,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
       ),
     );
   }

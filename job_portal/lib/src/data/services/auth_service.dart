@@ -4,14 +4,14 @@ import 'package:job_portal/src/data/models/usermodel.dart';
 import 'package:job_portal/src/data/repositories/auth_repository.dart';
 
 class AuthService implements AuthRepository {
+
   final FirebaseAuth _firebaseAuth;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   AuthService(this._firebaseAuth);
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<UserModel?> signInWithEmailAndPassword(
-      String email, String password) async {
+  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async {
     try {
       final UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -106,4 +106,5 @@ class AuthService implements AuthRepository {
     }
     return userType;
   }
+
 }

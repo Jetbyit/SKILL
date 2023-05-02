@@ -22,3 +22,4 @@ const appShadowColorDark = Color(0x1A3E3942);
 
 const appColorPrimary = Color(0xFF1157FA);
 const appLayout_background = Color(0xFFf8f8f8);
+const delet_color = Color(0xFFff0000);

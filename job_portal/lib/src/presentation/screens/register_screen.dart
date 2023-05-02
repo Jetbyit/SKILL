@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:job_portal/src/data/models/employermodel.dart';
+import 'package:job_portal/src/data/models/user_data.dart';
 import 'package:job_portal/src/data/models/workermodel.dart';
 import 'package:job_portal/src/presentation/screens/login_screen.dart';
 import 'package:job_portal/src/presentation/screens/rigester_form_component.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:job_portal/src/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class ARegisterScreen extends StatefulWidget {
   Worker? worker;
@@ -16,6 +22,8 @@ class ARegisterScreen extends StatefulWidget {
 }
 
 class _ARegisterScreenState extends State<ARegisterScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

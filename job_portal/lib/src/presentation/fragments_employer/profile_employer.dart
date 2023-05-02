@@ -5,7 +5,8 @@ import 'package:job_portal/src/data/models/employermodel.dart';
 import 'package:job_portal/src/data/models/previos_work.dart';
 import 'package:job_portal/src/data/repositories/job_offer_repository.dart';
 import 'package:job_portal/src/presentation/widgets/common_cached_image.dart';
-import 'package:job_portal/src/presentation/widgets/sidebar.dart';
+import 'package:job_portal/src/presentation/widgets/sidebar_employer.dart';
+import 'package:job_portal/src/presentation/widgets/sidebar_user.dart';
 import 'package:job_portal/src/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -48,7 +49,7 @@ class ProfileEmployerState extends State<ProfileEmployer> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Sidebar(),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SidebarEmployer(),),);
             },
             icon: const Icon(
               Icons.settings,

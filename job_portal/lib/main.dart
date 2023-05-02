@@ -38,7 +38,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   final AuthRepository _authRepository = AuthRepository();
-  bool _didNavigate = false;
+  // bool _didNavigate = false;
   Widget _getScreenId() {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
@@ -53,15 +53,12 @@ class _MyAppState extends State<MyApp> {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             // todo: choice between worker screen and employer screen
             bool? typeUser = await _authRepository.getUserType(snapshot!.data!.uid);
-            if (!_didNavigate) {
-              if(typeUser!){
-                // todo: navigate into worker dash screen
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ADashboardSkillerScreen()));
-              }else{
-                // todo:  navigate into employer dash screen
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ADashboardEmployerScreen()));
-              }
-              _didNavigate = true;
+            if(typeUser!){
+              // todo: navigate into worker dash screen
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ADashboardSkillerScreen()));
+            }else{
+              // todo:  navigate into employer dash screen
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ADashboardEmployerScreen()));
             }
           });
           return SplashScreen();
@@ -70,10 +67,7 @@ class _MyAppState extends State<MyApp> {
           print(' tu es sur SplashScreen De: SignInSignUPScreen() retour ${FirebaseAuth.instance.currentUser}');
           WidgetsBinding.instance.addPostFrameCallback((_) {
             // todo: choice between worker screen and employer screen
-            if (!_didNavigate) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AWelcomeScreen()));
-              _didNavigate = true;
-            }
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AWelcomeScreen()));
           });
           return SplashScreen();
         }
